@@ -1,0 +1,90 @@
+{
+  "name": "excel-csv",
+  "version": "1.0.0",
+  "description": "Write CSV files that Excel cannot mangle (leading zeros, long IDs, dates, gene names, formula injection, Korean/CJK text) and read the CSV files Excel produces (UTF-8/UTF-16/CP949, sep= lines).",
+  "keywords": [
+    "csv",
+    "excel",
+    "export",
+    "spreadsheet",
+    "leading-zeros",
+    "csv-injection",
+    "formula-injection",
+    "bom",
+    "utf-8",
+    "utf-16",
+    "cp949",
+    "euc-kr",
+    "korean",
+    "tsv",
+    "stringify",
+    "parse"
+  ],
+  "license": "MIT",
+  "author": "fillddak",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fillddak/module.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fillddak/module/issues"
+  },
+  "homepage": "https://github.com/fillddak/module#readme",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "excel-csv": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.ko.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-vocabulary.mjs",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:smoke": "node --test test/smoke/esm.test.mjs test/smoke/cjs.test.cjs",
+    "test:browser": "node test/browser/run.mjs",
+    "test:bun": "bun test/smoke/runtime.mjs",
+    "lint:package": "publint --strict && attw --pack .",
+    "check": "npm run typecheck && npm run test:coverage && npm run build && npm run test:smoke && npm run lint:package",
+    "prepublishOnly": "npm run check",
+    "bench": "npm run build && node bench/stringify.bench.mjs"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@types/node": "^22.20.4",
+    "@vitest/coverage-v8": "^3.2.7",
+    "fast-check": "^4.10.2",
+    "playwright-core": "^1.63.0",
+    "publint": "^0.3.24",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}
