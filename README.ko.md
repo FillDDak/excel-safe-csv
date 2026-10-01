@@ -3,7 +3,7 @@
 **엑셀이 망가뜨릴 수 없는 CSV를 만들고, 엑셀이 저장한 CSV를 그대로 읽습니다.**
 
 [![npm](https://img.shields.io/npm/v/excel-safe-csv.svg)](https://www.npmjs.com/package/excel-safe-csv)
-[![CI](https://github.com/fillddak/module/actions/workflows/ci.yml/badge.svg)](https://github.com/fillddak/module/actions/workflows/ci.yml)
+[![CI](https://github.com/FillDDak/excel-safe-csv/actions/workflows/ci.yml/badge.svg)](https://github.com/FillDDak/excel-safe-csv/actions/workflows/ci.yml)
 ![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![types](https://img.shields.io/badge/types-TypeScript-blue)
 [![license](https://img.shields.io/npm/l/excel-safe-csv.svg)](./LICENSE)

@@ -25,4 +25,4 @@ First release.
 - `encode` / `decode` helpers, including UTF-16LE output.
 - The `excel-safe-csv` command line tool with `fix`, `from-json` and `clean` commands.
 
-[1.0.0]: https://github.com/fillddak/module/releases/tag/v1.0.0
+[1.0.0]: https://github.com/FillDDak/excel-safe-csv/releases/tag/v1.0.0

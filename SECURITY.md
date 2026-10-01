@@ -13,7 +13,7 @@ Google Sheets or LibreOffice Calc is a security bug. So is a value that makes th
 ## Reporting a vulnerability
 
 Please report vulnerabilities privately through
-[GitHub security advisories](https://github.com/fillddak/module/security/advisories/new) rather than
+[GitHub security advisories](https://github.com/FillDDak/excel-safe-csv/security/advisories/new) rather than
 in a public issue. Include the value(s), the options used and the spreadsheet application and
 version. You will receive a response within a few days.
 
