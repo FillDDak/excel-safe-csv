@@ -2,7 +2,7 @@
 
 ## Scope
 
-excel-csv's main security property is that **untrusted values can never become live spreadsheet
+excel-safe-csv's main security property is that **untrusted values can never become live spreadsheet
 formulas** ("CSV injection" or "formula injection", see
 [OWASP](https://owasp.org/www-community/attacks/CSV_Injection)) unless you explicitly opt out with
 `formulas: 'allow'` or `type: 'raw'`.

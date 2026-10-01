@@ -4,4 +4,4 @@ import * as lib from '../../dist/index.js';
 import { runChecks } from './checks.mjs';
 
 await runChecks(lib, assert);
-console.log(`excel-csv smoke test passed (${typeof Bun === 'undefined' ? 'node' : `bun ${Bun.version}`})`);
+console.log(`excel-safe-csv smoke test passed (${typeof Bun === 'undefined' ? 'node' : `bun ${Bun.version}`})`);

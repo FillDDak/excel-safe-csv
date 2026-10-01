@@ -1,18 +1,18 @@
-# excel-csv
+# excel-safe-csv
 
 **엑셀이 망가뜨릴 수 없는 CSV를 만들고, 엑셀이 저장한 CSV를 그대로 읽습니다.**
 
-[![npm](https://img.shields.io/npm/v/excel-csv.svg)](https://www.npmjs.com/package/excel-csv)
+[![npm](https://img.shields.io/npm/v/excel-safe-csv.svg)](https://www.npmjs.com/package/excel-safe-csv)
 [![CI](https://github.com/fillddak/module/actions/workflows/ci.yml/badge.svg)](https://github.com/fillddak/module/actions/workflows/ci.yml)
 ![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![types](https://img.shields.io/badge/types-TypeScript-blue)
-[![license](https://img.shields.io/npm/l/excel-csv.svg)](./LICENSE)
+[![license](https://img.shields.io/npm/l/excel-safe-csv.svg)](./LICENSE)
 
 [English](./README.md)
 
 "CSV 다운로드" 버튼을 만들어 본 적이 있다면, 엑셀에서 파일을 열었을 때 이런 일을 겪어 보셨을 겁니다.
 
-| 내보낸 데이터                         | 엑셀에 보이는 값                        | excel-csv 사용 시 |
+| 내보낸 데이터                         | 엑셀에 보이는 값                        | excel-safe-csv 사용 시 |
 | ------------------------------------ | --------------------------------------- | ----------------- |
 | `02134` (우편번호), `007` (사번)       | `2134`, `7`                             | `02134`, `007`    |
 | `1234567890123456789` (주문번호)      | `1.23457E+18` (뒷자리는 영영 사라짐)     | `1234567890123456789` |
@@ -22,7 +22,7 @@
 | `=HYPERLINK("http://evil…")`         | 실제로 동작하는 링크 (**CSV 인젝션**)     | 그냥 텍스트        |
 | BOM 없는 `김철수`                      | `ê¹€ì² ìˆ˜` 같은 깨진 글자              | `김철수`           |
 
-excel-csv는 이 문제들을 **데이터를 바꾸지 않고** 해결합니다. 넣은 값이 엑셀에 그대로 보입니다.
+excel-safe-csv는 이 문제들을 **데이터를 바꾸지 않고** 해결합니다. 넣은 값이 엑셀에 그대로 보입니다.
 반대로 엑셀이 저장한 CSV(UTF-8, UTF-16, 한국어 윈도우의 CP949 등)도 정확히 읽어서, 사용자가 올린
 파일을 바로 처리할 수 있습니다.
 
@@ -49,14 +49,14 @@ excel-csv는 이 문제들을 **데이터를 바꾸지 않고** 해결합니다.
 ## 설치
 
 ```sh
-npm install excel-csv
-# pnpm add excel-csv · yarn add excel-csv · bun add excel-csv · deno add npm:excel-csv
+npm install excel-safe-csv
+# pnpm add excel-safe-csv · yarn add excel-safe-csv · bun add excel-safe-csv · deno add npm:excel-safe-csv
 ```
 
 ## 빠른 시작
 
 ```js
-import { stringify } from 'excel-csv';
+import { stringify } from 'excel-safe-csv';
 
 const csv = stringify(
   [
@@ -91,7 +91,7 @@ stringify(users, { columns: { name: '이름', phone: '전화번호', memo: '메�
 엑셀이 저장한 CSV는 인코딩과 상관없이 읽을 수 있습니다.
 
 ```js
-import { parseObjects } from 'excel-csv';
+import { parseObjects } from 'excel-safe-csv';
 
 const rows = parseObjects(await file.arrayBuffer(), { fallbackEncoding: 'cp949' });
 // [{ 이름: '김민지', 전화번호: '010-1234-5678', ... }]
@@ -102,7 +102,7 @@ const rows = parseObjects(await file.arrayBuffer(), { fallbackEncoding: 'cp949' 
 ### 브라우저에서 다운로드 버튼
 
 ```js
-import { stringify } from 'excel-csv';
+import { stringify } from 'excel-safe-csv';
 
 function downloadCsv(rows, filename) {
   const blob = new Blob([stringify(rows)], { type: 'text/csv;charset=utf-8' });
@@ -118,7 +118,7 @@ function downloadCsv(rows, filename) {
 ```js
 import { writeFileSync } from 'node:fs';
 import { Readable } from 'node:stream';
-import { encode, stringify, stringifyAsync } from 'excel-csv';
+import { encode, stringify, stringifyAsync } from 'excel-safe-csv';
 
 // 파일로 저장
 writeFileSync('report.csv', encode(stringify(rows)));
@@ -137,7 +137,7 @@ app.get('/export.csv', (req, res) => {
 ### Fetch `Response`: Next.js, Remix, Hono, Bun, Deno, Cloudflare Workers
 
 ```js
-import { stringifyStream } from 'excel-csv';
+import { stringifyStream } from 'excel-safe-csv';
 
 export async function GET() {
   return new Response(stringifyStream(await getOrders()), {
@@ -156,7 +156,7 @@ export async function GET() {
 분리)"로 저장한 파일은 CP949이므로 `fallbackEncoding: 'cp949'`를 주면 됩니다.
 
 ```js
-import { parse, parseObjects } from 'excel-csv';
+import { parse, parseObjects } from 'excel-safe-csv';
 
 parse(bytes, { fallbackEncoding: 'cp949' }); // 한국: CP949 / EUC-KR
 parse(bytes, { fallbackEncoding: 'shift_jis' }); // 일본
@@ -164,7 +164,7 @@ parse(bytes, { fallbackEncoding: ['gbk', 'big5'] }); // 순서대로 시도
 parse(bytes); // 기본값: windows-1252 (서유럽, 미주)
 ```
 
-구분자(`,` `;` 탭 `|`)는 자동으로 감지하고, `sep=` 줄을 인식하며, excel-csv나 다른 도구가 쓴
+구분자(`,` `;` 탭 `|`)는 자동으로 감지하고, `sep=` 줄을 인식하며, excel-safe-csv나 다른 도구가 쓴
 `="…"` 셀은 원래 텍스트로 되돌립니다. 값은 항상 문자열로 반환되고, 어떤 변환도 하지 않습니다.
 
 레거시 인코딩은 런타임의 `TextDecoder`에 의존합니다. Node.js, 브라우저, Deno는 모든
@@ -173,7 +173,7 @@ Shift_JIS, GBK, Big5, Windows-1252 등)을 지원합니다. 지원하지 않는 
 `INVALID_OPTION`인 `CsvError`가 발생합니다.
 
 > **Node.js의 CP949 문제**: Node.js 내장 `TextDecoder('euc-kr')`는 CP949의 확장 한글 8,822자(`똠`,
-> `햏`, `갂` 등)를 지원하지 않아 한국어 엑셀 파일의 일부 글자가 깨집니다. excel-csv는 이를 감지해
+> `햏`, `갂` 등)를 지원하지 않아 한국어 엑셀 파일의 일부 글자가 깨집니다. excel-safe-csv는 이를 감지해
 > WHATWG 표준을 그대로 따르는 자체 디코더를 사용하므로, 어떤 런타임에서도 한글이 정확히 읽힙니다.
 
 ### 유럽식 엑셀 (세미콜론, 소수점 쉼표)
@@ -198,7 +198,7 @@ stringify(rows, {
 이미 Papa Parse, csv-stringify, fast-csv를 쓰고 있다면 각 값을 `formatCell`에 통과시키면 됩니다.
 
 ```js
-import { formatCell } from 'excel-csv';
+import { formatCell } from 'excel-safe-csv';
 import { stringify } from 'csv-stringify/sync';
 
 stringify(records, { cast: { string: (value) => formatCell(value) } });
@@ -207,7 +207,7 @@ Papa.unparse(records.map((record) => record.map((value) => formatCell(value))));
 
 ## 동작 원리
 
-**문자열은 문자열로, 숫자는 숫자로.** excel-csv는 각 값을 자바스크립트 타입 그대로 엑셀에 보이도록
+**문자열은 문자열로, 숫자는 숫자로.** excel-safe-csv는 각 값을 자바스크립트 타입 그대로 엑셀에 보이도록
 씁니다.
 
 | 값                                  | 기록되는 형태                          | 엑셀에 보이는 값              |
@@ -427,14 +427,14 @@ stringify([{ account: 12345, price: '1234.50', formula: '=SUM(B2:B9)' }], {
 ## 명령줄 도구
 
 ```sh
-npx excel-csv fix export.csv -o export-for-excel.csv                 # 기존 CSV를 엑셀에서 안전하게 열리도록 변환
-npx excel-csv from-json users.json -o users.csv                      # JSON 배열 → 엑셀용 CSV
-npx excel-csv clean upload.csv --fallback-encoding cp949 > clean.csv  # 엑셀 CSV(CP949 등) → 일반 UTF-8 CSV
+npx excel-safe-csv fix export.csv -o export-for-excel.csv                 # 기존 CSV를 엑셀에서 안전하게 열리도록 변환
+npx excel-safe-csv from-json users.json -o users.csv                      # JSON 배열 → 엑셀용 CSV
+npx excel-safe-csv clean upload.csv --fallback-encoding cp949 > clean.csv  # 엑셀 CSV(CP949 등) → 일반 UTF-8 CSV
 ```
 
 `fix`는 `42`, `-1.5`처럼 엑셀이 그대로 보여 주는 숫자는 숫자로 두고 나머지를 보호합니다. `--text`를
 주면 숫자도 텍스트로 보호합니다. 전체 옵션(`--delimiter`, `--encoding utf-16le`, `--no-bom`,
-`--protect`, `--formulas`, `--time-zone` 등)은 `npx excel-csv --help`로 확인하세요.
+`--protect`, `--formulas`, `--time-zone` 등)은 `npx excel-safe-csv --help`로 확인하세요.
 
 ## 호환성
 
@@ -453,7 +453,7 @@ npx excel-csv clean upload.csv --fallback-encoding cp949 > clean.csv  # 엑셀 C
 | Microsoft Excel (Windows, Mac, 웹) | 정확한 텍스트 |
 | Google 스프레드시트 | 정확한 텍스트 |
 | LibreOffice Calc | 기본 CSV 설정에서 정확한 텍스트(테스트에서 LibreOffice 24.2로 검증). 가져오기 대화 상자에서 "수식 계산"을 끄면 `="007"`로 보입니다. |
-| CSV를 읽는 프로그램 | `="007"`. `parse()`나 `excel-csv clean`으로 `007`을 되찾거나, 스프레드시트용이 아니라면 `protect: 'tab'` / `'none'`을 쓰세요. |
+| CSV를 읽는 프로그램 | `="007"`. `parse()`나 `excel-safe-csv clean`으로 `007`을 되찾거나, 스프레드시트용이 아니라면 `protect: 'tab'` / `'none'`을 쓰세요. |
 
 ## 자주 묻는 질문
 
@@ -469,7 +469,7 @@ npx excel-csv clean upload.csv --fallback-encoding cp949 > clean.csv  # 엑셀 C
 
 **그냥 `.xlsx`를 만들면 되지 않나요?**
 가능하다면 그것도 좋습니다. 하지만 CSV는 의존성이 필요 없고, 일정한 메모리로 스트리밍할 수 있고,
-모든 프로그램에서 열리며, 받는 사람이나 시스템이 CSV를 요구하는 경우도 많습니다. excel-csv는 CSV를
+모든 프로그램에서 열리며, 받는 사람이나 시스템이 CSV를 요구하는 경우도 많습니다. excel-safe-csv는 CSV를
 최대한 믿을 수 있게 만듭니다.
 
 **보호가 다른 프로그램에서 읽을 때 데이터를 바꾸나요?**

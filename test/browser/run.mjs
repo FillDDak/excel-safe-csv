@@ -43,7 +43,7 @@ try {
   await tab.goto(url);
   const result = await tab.waitForFunction(() => window.result, null, { timeout: 30_000 }).then((handle) => handle.jsonValue());
   if (result !== 'ok') throw new Error(result);
-  console.log(`excel-csv browser test passed (${browser.version()})`);
+  console.log(`excel-safe-csv browser test passed (${browser.version()})`);
 } finally {
   await browser.close();
   server.close();

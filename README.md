@@ -1,18 +1,18 @@
-# excel-csv
+# excel-safe-csv
 
 **Write CSV files that Excel can't mangle, and read the CSV files Excel produces.**
 
-[![npm](https://img.shields.io/npm/v/excel-csv.svg)](https://www.npmjs.com/package/excel-csv)
+[![npm](https://img.shields.io/npm/v/excel-safe-csv.svg)](https://www.npmjs.com/package/excel-safe-csv)
 [![CI](https://github.com/fillddak/module/actions/workflows/ci.yml/badge.svg)](https://github.com/fillddak/module/actions/workflows/ci.yml)
 ![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![types](https://img.shields.io/badge/types-TypeScript-blue)
-[![license](https://img.shields.io/npm/l/excel-csv.svg)](./LICENSE)
+[![license](https://img.shields.io/npm/l/excel-safe-csv.svg)](./LICENSE)
 
 [한국어 문서 (Korean)](./README.ko.md)
 
 Every "Export to CSV" button runs into the same problems when the file is opened in Excel:
 
-| Your data                        | What Excel shows                        | With excel-csv |
+| Your data                        | What Excel shows                        | With excel-safe-csv |
 | -------------------------------- | --------------------------------------- | -------------- |
 | `007` (zip code, employee ID)    | `7`                                     | `007`          |
 | `1234567890123456789` (order ID) | `1.23457E+18` (digits lost for good)    | `1234567890123456789` |
@@ -22,7 +22,7 @@ Every "Export to CSV" button runs into the same problems when the file is opened
 | `=HYPERLINK("http://evil…")`     | a live link (**CSV injection**)         | the text, inert |
 | `김철수`, `café` without a BOM    | `ê¹€ì² ìˆ˜`, `cafÃ©`                     | `김철수`, `café` |
 
-excel-csv fixes all of these, **without changing your data**: what you write is exactly what Excel
+excel-safe-csv fixes all of these, **without changing your data**: what you write is exactly what Excel
 shows. It also reads CSV files saved by Excel (UTF-8, UTF-16, the legacy Korean/Japanese/Chinese/Western
 code pages, `sep=` lines) so user uploads just work.
 
@@ -49,14 +49,14 @@ code pages, `sep=` lines) so user uploads just work.
 ## Install
 
 ```sh
-npm install excel-csv
-# pnpm add excel-csv · yarn add excel-csv · bun add excel-csv · deno add npm:excel-csv
+npm install excel-safe-csv
+# pnpm add excel-safe-csv · yarn add excel-safe-csv · bun add excel-safe-csv · deno add npm:excel-safe-csv
 ```
 
 ## Quick start
 
 ```js
-import { stringify } from 'excel-csv';
+import { stringify } from 'excel-safe-csv';
 
 const csv = stringify(
   [
@@ -91,7 +91,7 @@ stringify(users, { columns: { name: '이름', phone: '전화번호', memo: '메�
 Read a CSV file that Excel saved, in any encoding:
 
 ```js
-import { parseObjects } from 'excel-csv';
+import { parseObjects } from 'excel-safe-csv';
 
 const rows = parseObjects(await file.arrayBuffer(), { fallbackEncoding: 'cp949' });
 // [{ 이름: '김민지', 전화번호: '010-1234-5678', ... }]
@@ -102,7 +102,7 @@ const rows = parseObjects(await file.arrayBuffer(), { fallbackEncoding: 'cp949' 
 ### Download button in the browser
 
 ```js
-import { stringify } from 'excel-csv';
+import { stringify } from 'excel-safe-csv';
 
 function downloadCsv(rows, filename) {
   const blob = new Blob([stringify(rows)], { type: 'text/csv;charset=utf-8' });
@@ -118,7 +118,7 @@ function downloadCsv(rows, filename) {
 ```js
 import { writeFileSync } from 'node:fs';
 import { Readable } from 'node:stream';
-import { encode, stringify, stringifyAsync } from 'excel-csv';
+import { encode, stringify, stringifyAsync } from 'excel-safe-csv';
 
 // A file
 writeFileSync('report.csv', encode(stringify(rows)));
@@ -134,7 +134,7 @@ app.get('/export.csv', (req, res) => {
 ### Fetch `Response`: Next.js, Remix, Hono, Bun, Deno, Cloudflare Workers
 
 ```js
-import { stringifyStream } from 'excel-csv';
+import { stringifyStream } from 'excel-safe-csv';
 
 export async function GET() {
   return new Response(stringifyStream(await getOrders()), {
@@ -153,7 +153,7 @@ The encoding is detected from the byte order mark, then UTF-8, then `fallbackEnc
 page Excel used when it saved the file.
 
 ```js
-import { parse, parseObjects } from 'excel-csv';
+import { parse, parseObjects } from 'excel-safe-csv';
 
 parse(bytes, { fallbackEncoding: 'cp949' }); // Korea: CP949 / EUC-KR
 parse(bytes, { fallbackEncoding: 'shift_jis' }); // Japan
@@ -162,7 +162,7 @@ parse(bytes); // default fallback: windows-1252 (Western Europe, Americas)
 ```
 
 The delimiter (`,` `;` tab `|`) is detected automatically, `sep=` lines are honored, and `="…"` cells
-written by excel-csv (or other exporters) are turned back into their text.
+written by excel-safe-csv (or other exporters) are turned back into their text.
 Values always come back as strings; nothing is converted.
 
 Legacy encodings rely on the runtime's `TextDecoder`: Node.js, browsers and Deno support all
@@ -171,7 +171,7 @@ Legacy encodings rely on the runtime's `TextDecoder`: Node.js, browsers and Deno
 with code `INVALID_OPTION`.
 
 > Node.js's built-in `TextDecoder('euc-kr')` does not implement the 8,822 extra Hangul syllables of
-> CP949 (such as `똠` or `햏`) that Korean Excel writes. excel-csv detects this and uses its own
+> CP949 (such as `똠` or `햏`) that Korean Excel writes. excel-safe-csv detects this and uses its own
 > WHATWG-conformant decoder, so Korean text decodes correctly on every runtime.
 
 ### European Excel (semicolons and decimal commas)
@@ -196,7 +196,7 @@ Alternatively, `stringifyStream(rows, { delimiter: '\t', encoding: 'utf-16le' })
 Already using Papa Parse, csv-stringify or fast-csv? Run each value through `formatCell`:
 
 ```js
-import { formatCell } from 'excel-csv';
+import { formatCell } from 'excel-safe-csv';
 import { stringify } from 'csv-stringify/sync';
 
 stringify(records, { cast: { string: (value) => formatCell(value) } });
@@ -205,7 +205,7 @@ Papa.unparse(records.map((record) => record.map((value) => formatCell(value))));
 
 ## How it works
 
-**Strings stay strings, numbers stay numbers.** excel-csv writes each value so Excel shows it as
+**Strings stay strings, numbers stay numbers.** excel-safe-csv writes each value so Excel shows it as
 its JavaScript type:
 
 | Value                           | Written as                                  | Excel shows                |
@@ -435,13 +435,13 @@ Header cells are always protected like `'auto'` strings.
 ## Command line
 
 ```sh
-npx excel-csv fix export.csv -o export-for-excel.csv         # make an existing CSV safe to open in Excel
-npx excel-csv from-json users.json -o users.csv              # JSON array → Excel-safe CSV
-npx excel-csv clean upload.csv --fallback-encoding cp949 > clean.csv   # Excel CSV → plain UTF-8
+npx excel-safe-csv fix export.csv -o export-for-excel.csv         # make an existing CSV safe to open in Excel
+npx excel-safe-csv from-json users.json -o users.csv              # JSON array → Excel-safe CSV
+npx excel-safe-csv clean upload.csv --fallback-encoding cp949 > clean.csv   # Excel CSV → plain UTF-8
 ```
 
 `fix` keeps plain numbers such as `42` or `-1.5` as numbers (Excel shows them unchanged) and protects
-everything else; `--text` protects numbers too. Run `npx excel-csv --help` for all options
+everything else; `--text` protects numbers too. Run `npx excel-safe-csv --help` for all options
 (`--delimiter`, `--encoding utf-16le`, `--no-bom`, `--protect`, `--formulas`, `--time-zone`, …).
 
 ## Compatibility
@@ -461,7 +461,7 @@ How spreadsheet applications display protected (`="…"`) cells:
 | Microsoft Excel (Windows, Mac, web) | Exact text |
 | Google Sheets | Exact text |
 | LibreOffice Calc | Exact text with its default CSV settings (verified with LibreOffice 24.2 in the test suite). If "Evaluate formulas" is turned off in the import dialog, cells show `="007"`. |
-| Programs reading the CSV | `="007"`: use `parse()` or `excel-csv clean` to get `007` back, or `protect: 'tab'` / `'none'` if the file is not meant for spreadsheets. |
+| Programs reading the CSV | `="007"`: use `parse()` or `excel-safe-csv clean` to get `007` back, or `protect: 'tab'` / `'none'` if the file is not meant for spreadsheets. |
 
 ## FAQ
 
@@ -478,7 +478,7 @@ Pass numbers instead of strings, or use `type: 'number'` for columns of numeric 
 
 **Why not generate `.xlsx` instead?**
 When you can, do! But CSV needs no dependencies, streams with constant memory, opens in every
-program, and is often required by the people or systems receiving the file. excel-csv makes CSV as
+program, and is often required by the people or systems receiving the file. excel-safe-csv makes CSV as
 reliable as it can be.
 
 **Does protection change the data for other programs?**
