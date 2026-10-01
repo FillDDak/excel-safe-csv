@@ -13,7 +13,7 @@ export interface ParseOptions extends DecodeOptions {
   delimiter?: string;
   /**
    * Turn text formulas such as `="007"` (the protection written by
-   * excel-csv and many other exporters) back into their text, `007`.
+   * excel-safe-csv and many other exporters) back into their text, `007`.
    * @default true
    */
   unwrapFormulas?: boolean;

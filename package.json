@@ -1,5 +1,5 @@
 {
-  "name": "excel-csv",
+  "name": "excel-safe-csv",
   "version": "1.0.0",
   "description": "Write CSV files that Excel cannot mangle (leading zeros, long IDs, dates, gene names, formula injection, Korean/CJK text) and read the CSV files Excel produces (UTF-8/UTF-16/CP949, sep= lines).",
   "keywords": [
@@ -49,7 +49,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "excel-csv": "./dist/cli.js"
+    "excel-safe-csv": "dist/cli.js"
   },
   "files": [
     "dist",

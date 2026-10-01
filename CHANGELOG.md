@@ -23,6 +23,6 @@ First release.
   (Node.js).
 - `formatCell`, `wouldExcelConvert` and `isFormulaLike` for use with other CSV libraries.
 - `encode` / `decode` helpers, including UTF-16LE output.
-- The `excel-csv` command line tool with `fix`, `from-json` and `clean` commands.
+- The `excel-safe-csv` command line tool with `fix`, `from-json` and `clean` commands.
 
 [1.0.0]: https://github.com/fillddak/module/releases/tag/v1.0.0

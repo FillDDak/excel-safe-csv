@@ -30,7 +30,7 @@ export interface CsvErrorDetails {
   cause?: unknown;
 }
 
-/** The only error type thrown by excel-csv. Check `code` to tell failures apart. */
+/** The only error type thrown by excel-safe-csv. Check `code` to tell failures apart. */
 export class CsvError extends Error {
   override readonly name = 'CsvError';
   readonly code: CsvErrorCode;

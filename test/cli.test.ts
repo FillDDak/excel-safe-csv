@@ -14,14 +14,14 @@ function run(args: string[], input?: string | Uint8Array): { stdout: string; std
   return { stdout: result.stdout.toString('utf8'), stderr: result.stderr.toString('utf8'), status: result.status, bytes: result.stdout };
 }
 
-const tmp = (): string => mkdtempSync(join(tmpdir(), 'excel-csv-cli-'));
+const tmp = (): string => mkdtempSync(join(tmpdir(), 'excel-safe-csv-cli-'));
 
-describe('excel-csv CLI', () => {
+describe('excel-safe-csv CLI', () => {
   it('prints help and version', () => {
     const help = run(['--help']);
     expect(help.status).toBe(0);
-    expect(help.stdout).toMatch(/^excel-csv — CSV files that Excel cannot mangle/);
-    expect(help.stdout).toMatch(/excel-csv fix/);
+    expect(help.stdout).toMatch(/^excel-safe-csv — CSV files that Excel cannot mangle/);
+    expect(help.stdout).toMatch(/excel-safe-csv fix/);
     expect(run(['-h']).stdout).toBe(help.stdout);
     expect(run(['--version']).stdout).toBe(`${packageJson.version}\n`);
     expect(run(['-v']).status).toBe(0);

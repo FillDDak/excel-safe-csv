@@ -1,6 +1,6 @@
 /**
  * End-to-end test with a real spreadsheet engine: LibreOffice Calc opens the
- * CSV files written by excel-csv (with formula evaluation and special-number
+ * CSV files written by excel-safe-csv (with formula evaluation and special-number
  * detection on, i.e. as aggressive as Excel), converts them to .xlsx, and the
  * resulting cells are compared with the original values.
  *
@@ -28,7 +28,7 @@ type Cell = [value: unknown, type: string];
 
 /** Opens CSV text in LibreOffice Calc and returns the cells it produced. */
 function openInCalc(csv: string, { delimiter = 44, locale = 1033 }: { delimiter?: number; locale?: number } = {}): Cell[][] {
-  const dir = mkdtempSync(join(tmpdir(), 'excel-csv-'));
+  const dir = mkdtempSync(join(tmpdir(), 'excel-safe-csv-'));
   writeFileSync(join(dir, 'data.csv'), encode(csv));
   // Separator, text delimiter ("), UTF-8, from line 1, no column formats, locale,
   // quoted-as-text off, detect special numbers on, ..., evaluate formulas on.

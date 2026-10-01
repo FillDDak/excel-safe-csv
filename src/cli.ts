@@ -4,12 +4,12 @@ import { CsvError, encode, parse, stringify, type OutputEncoding, type Stringify
 
 declare const __VERSION__: string;
 
-const HELP = `excel-csv — CSV files that Excel cannot mangle
+const HELP = `excel-safe-csv — CSV files that Excel cannot mangle
 
 Usage:
-  excel-csv fix [input] [options]        Rewrite a CSV so Excel shows every value exactly
-  excel-csv from-json [input] [options]  Convert a JSON array (of objects or arrays) to an Excel-safe CSV
-  excel-csv clean [input] [options]      Convert a CSV saved by Excel (any encoding, sep= line,
+  excel-safe-csv fix [input] [options]        Rewrite a CSV so Excel shows every value exactly
+  excel-safe-csv from-json [input] [options]  Convert a JSON array (of objects or arrays) to an Excel-safe CSV
+  excel-safe-csv clean [input] [options]      Convert a CSV saved by Excel (any encoding, sep= line,
                                          ="..." cells) to a plain UTF-8 CSV (no BOM) for other programs
 
   [input] is a file path; omit it or use "-" to read standard input.
@@ -35,13 +35,13 @@ Output options:
   -v, --version                Show the version
 
 Examples:
-  excel-csv fix export.csv -o export-for-excel.csv
-  excel-csv from-json users.json -o users.csv
-  excel-csv clean upload.csv --fallback-encoding euc-kr > clean.csv
+  excel-safe-csv fix export.csv -o export-for-excel.csv
+  excel-safe-csv from-json users.json -o users.csv
+  excel-safe-csv clean upload.csv --fallback-encoding euc-kr > clean.csv
 `;
 
 function fail(message: string): never {
-  process.stderr.write(`excel-csv: ${message}\nRun "excel-csv --help" for usage.\n`);
+  process.stderr.write(`excel-safe-csv: ${message}\nRun "excel-safe-csv --help" for usage.\n`);
   process.exit(2);
 }
 
@@ -167,7 +167,7 @@ function main(argv: string[]): void {
   }
 }
 
-// Exit quietly when the reader goes away (e.g. `excel-csv fix big.csv | head`).
+// Exit quietly when the reader goes away (e.g. `excel-safe-csv fix big.csv | head`).
 process.stdout.on('error', (error: NodeJS.ErrnoException) => {
   if (error.code === 'EPIPE') process.exit(0);
   throw error;
